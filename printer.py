@@ -9,9 +9,9 @@ CUT_PAPER_FULL = b'\x1D\x56\x00'
 def get_os():
     return platform.system()
 
-def print_ticket(client_name, address, products, total_price, timestamp=None):
+def print_ticket(client_name, address, products, total_price, timestamp=None, numero=0):
     try:
-        ticket_content = generate_ticket(client_name, address, products, total_price, timestamp)
+        ticket_content = generate_ticket(client_name, address, products, total_price, timestamp, numero)
         if ticket_content:
             print_ticket_via_default_printer(ticket_content)
             return "Comanda impresa correctamente", 200
@@ -20,20 +20,26 @@ def print_ticket(client_name, address, products, total_price, timestamp=None):
     except Exception as e:
         return f"Error al imprimir: {str(e)}", 500
 
-def generate_ticket(client_name, address, products, total_price, timestamp=None):
+def generate_ticket(client_name, address, products, total_price, timestamp=None, numero=0):
     timestamp = timestamp or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ticket_content = f"** COMANDA **\n"
+    ticket_content += f"N° Ticket: {numero}\n"
     ticket_content += f"Hora: {timestamp}\n"
     ticket_content += f"Cliente: {client_name}\n"
     ticket_content += f"Dirección: {address}\n\n"
     
     ticket_content += "Productos:\n"
     for product in products:
-        ticket_content += f"{product['name']} - ${product['price']:.2f}\n"
+        ticket_content += f"{product['amount']}x {product['name']} - ${product['price']:.2f}\n"
     
     ticket_content += f"\nTotal: ${total_price:.2f}\n"
-    ticket_content += "Gracias por su compra\n\n\n"
-    
+    ticket_content += "Gracias por su compra"
+
+    ticket_content += "\n\n.....................\n\n\n\n"
+    ticket_content += f"Cliente: {client_name}\n"
+    ticket_content += f"Dirección: {address}\n\n"
+    ticket_content += f"N° Ticket: {numero} - TOTAL ${total_price:.2f}\n\n\n"
+
     # Convertir el contenido del ticket a bytes y agregar el comando de corte
     ticket_bytes = ticket_content.encode('cp437')  # Usar cp437 para una codificación alternativa
     

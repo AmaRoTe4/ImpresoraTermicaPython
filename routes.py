@@ -13,12 +13,13 @@ def create_routes(app):
 
             client_name = data['client_name']
             address = data['address']
-            products = data['products']  # Lista de productos en formato [{"name": "producto", "price": 10.00}, ...]
+            products = data['products'] 
             total_price = data['total_price']
+            numero = data['numero']
             timestamp = data.get('timestamp', 'No se proporcionó hora')  # Hora opcional
 
             # Llamar a la función para imprimir el ticket
-            response_message, status_code = print_ticket(client_name, address, products, total_price, timestamp)
+            response_message, status_code = print_ticket(client_name, address, products, total_price, timestamp, numero)
             return jsonify({"message": response_message}), status_code
 
         except Exception as e:
