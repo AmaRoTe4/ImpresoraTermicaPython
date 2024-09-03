@@ -22,7 +22,7 @@ def print_ticket(client_name, address, products, total_price, timestamp=None, nu
 
 def generate_ticket(client_name, address, products, total_price, timestamp=None, numero=0, mensaje="Gracias por su compra!!!"):
     timestamp = timestamp or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    ticket_content = ""
+    ticket_content = "----- INESITA -----"
     ticket_content += f"N° Ticket: {numero}\n"
     ticket_content += f"Hora: {timestamp}\n"
     ticket_content += f"Cliente: {client_name}\n"
